@@ -115,7 +115,7 @@ export default function ContentWorkflowModal({
       setPlannedDate(new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
 
       const nayUser = allUsers.find((u) => u.email === 'nay@goeuro.de');
-      const thnUser = allUsers.find((u) => u.email === 'thn@goeuro.de');
+      const thnUser = allUsers.find((u) => u.email === 'ceothnaing@gmail.com' || u.email === 'thn@goeuro.de');
       setFactualReviewerId(nayUser?.id || '');
       setBrandApproverId(thnUser?.id || '');
 

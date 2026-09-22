@@ -119,7 +119,7 @@ export default function Navbar() {
   ];
 
   // Group users into 3 Profile Tiers
-  const founderUsers = allUsers.filter((u) => u.role?.name === 'Founder' || u.email === 'thn@goeuro.de');
+  const founderUsers = allUsers.filter((u) => u.role?.name === 'Founder' || u.email === 'ceothnaing@gmail.com' || u.email === 'thn@goeuro.de');
   const superAdminUsers = allUsers.filter((u) => u.role?.name === 'Super Admin' || u.email === 'admin@goeuro.de');
   const consultantUsers = allUsers.filter(
     (u) =>

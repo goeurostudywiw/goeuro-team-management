@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     let pendingApprovalWhere: any = {};
     if (user?.email === 'nay@goeuro.de') {
       pendingApprovalWhere = { stage: 'FACTUAL_REVIEW' };
-    } else if (user?.email === 'thn@goeuro.de' || isManagerOrAdmin) {
+    } else if (user?.email === 'ceothnaing@gmail.com' || user?.email === 'thn@goeuro.de' || isManagerOrAdmin) {
       pendingApprovalWhere = { stage: { in: ['FACTUAL_REVIEW', 'BRAND_APPROVAL'] } };
     } else {
       pendingApprovalWhere = {

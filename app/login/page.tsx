@@ -84,11 +84,11 @@ function LoginForm() {
 
   const fillCredentials = (userEmail: string) => {
     setEmail(userEmail);
-    setPassword('Goeuro2026!');
+    setPassword(userEmail === 'ceothnaing@gmail.com' ? 'GoEuro@Founder' : 'Goeuro2026!');
   };
 
   // Group users into 3 Profile Tiers
-  const founderUsers = allUsers.filter((u) => u.role?.name === 'Founder' || u.email === 'thn@goeuro.de');
+  const founderUsers = allUsers.filter((u) => u.role?.name === 'Founder' || u.email === 'ceothnaing@gmail.com' || u.email === 'thn@goeuro.de');
   const superAdminUsers = allUsers.filter((u) => u.role?.name === 'Super Admin' || u.email === 'admin@goeuro.de');
   const consultantUsers = allUsers.filter(
     (u) =>
@@ -160,7 +160,7 @@ function LoginForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="thn@goeuro.de"
+                  placeholder="name@company.com"
                   className="w-full pl-10 pr-3.5 py-2.5 text-xs sm:text-sm border border-zinc-200 rounded-xl bg-zinc-50/50 focus:ring-2 focus:ring-purple-600 focus:outline-none transition"
                 />
               </div>
@@ -171,9 +171,6 @@ function LoginForm() {
                 <label className="block text-xs font-bold text-zinc-700">
                   {isBurmese ? 'စကားဝှက်' : 'Password'} *
                 </label>
-                <span className="text-[11px] text-zinc-400">
-                  Default: <code className="text-purple-600 font-mono font-semibold">Goeuro2026!</code>
-                </span>
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
@@ -260,7 +257,7 @@ function LoginForm() {
                 </div>
 
                 <div className="pt-2 flex items-center justify-between text-[11px] text-zinc-400">
-                  <span>Server: Oracle Cloud VPS</span>
+                  <span>Server: Cloud Protected (Vercel & Neon)</span>
                   <span className="text-emerald-600 font-semibold flex items-center space-x-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Encrypted Session</span>

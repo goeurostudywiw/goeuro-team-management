@@ -151,15 +151,17 @@ async function main() {
   });
 
   // 4. Create Users (3 Profile Tiers: Founder, Super Admin, Consultant & Management)
+  const FOUNDER_PASSWORD_HASH = hashPassword('GoEuro@Founder');
+
   const thn = await prisma.user.create({
     data: {
       orgId: org.id,
       name: 'Thet Htoo Naing',
-      email: 'thn@goeuro.de',
-      title: 'Founder and Growth Lead',
+      email: 'ceothnaing@gmail.com',
+      title: 'Founder and Executive Director',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       roleId: founderRole.id,
-      passwordHash: DEFAULT_PASSWORD_HASH,
+      passwordHash: FOUNDER_PASSWORD_HASH,
       status: 'ACTIVE',
     },
   });

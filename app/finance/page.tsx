@@ -38,7 +38,7 @@ export default function FinancePayrollPage() {
   const isBurmese = language === 'my';
   const { currentUser, can } = useUserSession();
 
-  const isFounder = currentUser?.role?.name === 'Founder' || currentUser?.email === 'thn@goeuro.de';
+  const isFounder = currentUser?.role?.name === 'Founder' || currentUser?.email === 'ceothnaing@gmail.com' || currentUser?.email === 'thn@goeuro.de';
   const hasFinanceAccess = isFounder || can('finance:view') || can('*');
 
   // Active Tab

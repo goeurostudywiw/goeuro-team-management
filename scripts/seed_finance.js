@@ -16,7 +16,7 @@ async function main() {
     userMap[u.email] = u;
   });
 
-  const thn = userMap['thn@goeuro.de'];
+  const thn = userMap['ceothnaing@gmail.com'] || userMap['thn@goeuro.de'];
   const kmh = userMap['kmh@goeuro.de'];
   const yytt = userMap['yytt@goeuro.de'];
   const nmth = userMap['nmth@goeuro.de'];

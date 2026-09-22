@@ -192,15 +192,15 @@ export default function InteractiveCalculator({ isBurmese, onSelectOption }: Cal
               <span className="text-xs uppercase font-bold tracking-wider text-purple-300">
                 {isBurmese ? 'ဘဏ္ဍာရေး အနှစ်ချုပ်' : 'Financial Breakdown'}
               </span>
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
+              <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
                 <CheckCircle2 className="w-3 h-3" />
-                <span>100% Guaranteed</span>
+                <span>{isBurmese ? 'တရားဝင် စာချုပ်သတ်မှတ်နှုန်း' : 'Contracted Scale'}</span>
               </span>
             </div>
 
             <div>
               <div className="text-xs text-zinc-400">
-                {isBurmese ? '၃ နှစ်တာ စုစုပေါင်း ရရှိမည့် လစာ' : 'Total 3-Year Guaranteed Stipend:'}
+                {isBurmese ? '၃ နှစ်တာ စုစုပေါင်း ရရှိမည့် လစာ' : 'Total 3-Year Contracted Stipend:'}
               </div>
               <div className="text-3xl sm:text-4xl font-black text-white mt-1">
                 €{totalThreeYears.toLocaleString()}
@@ -213,7 +213,7 @@ export default function InteractiveCalculator({ isBurmese, onSelectOption }: Cal
             <div className="space-y-2.5 pt-2 border-t border-white/10 text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400">{isBurmese ? 'ကျူရှင်လခ' : 'Tuition Fees'}:</span>
-                <span className="font-extrabold text-emerald-400">0 € (100% Free)</span>
+                <span className="font-extrabold text-emerald-400">0 € ({isBurmese ? 'အခမဲ့' : 'No Tuition'})</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400">{isBurmese ? 'Blocked Account (€11,904)' : 'Blocked Account (€11,904)'}:</span>
@@ -266,7 +266,7 @@ export default function InteractiveCalculator({ isBurmese, onSelectOption }: Cal
                 >
                   <div className="font-bold text-sm text-zinc-900">Bachelor of Science / Arts</div>
                   <div className="text-xs text-zinc-500 mt-1">3 Years • 180 ECTS Credits</div>
-                  <div className="text-xs text-purple-700 font-bold mt-2">100% Tuition-Free</div>
+                  <div className="text-xs text-purple-700 font-bold mt-2">Tuition-Free (0 €)</div>
                 </button>
 
                 <button
@@ -279,7 +279,7 @@ export default function InteractiveCalculator({ isBurmese, onSelectOption }: Cal
                 >
                   <div className="font-bold text-sm text-zinc-900">Master of Science / Arts</div>
                   <div className="text-xs text-zinc-500 mt-1">2 Years • 120 ECTS Credits</div>
-                  <div className="text-xs text-purple-700 font-bold mt-2">100% Tuition-Free</div>
+                  <div className="text-xs text-purple-700 font-bold mt-2">Tuition-Free (0 €)</div>
                 </button>
               </div>
             </div>

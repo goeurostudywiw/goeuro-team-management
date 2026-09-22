@@ -52,7 +52,7 @@ export default function EligibilityQuiz({ isBurmese, onComplete }: QuizProps) {
         pathway_my: 'ဂျာမနီ အစိုးရတက္ကသိုလ် (ကျူရှင်လခ အခမဲ့ ဘွဲ့/မဟာဘွဲ့)',
         match: '94%',
         desc_my: 'သင့်တွင် ဘွဲ့ဒီဂရီ သို့မဟုတ် အထက်တန်းပညာအရည်အချင်း ပြည့်စုံသဖြင့် ဂျာမနီ အဆင့်မြင့် အစိုးရ တက္ကသိုလ်များတွင် ကျူရှင်လခ ၀ ယူရိုဖြင့် တက်ရောက်နိုင်ပါသည်။ ဘွဲ့ရရှိပြီးပါက ၁၈ လ အလုပ်ရှာဖွေခွင့်နှင့် EU Blue Card ရရှိပါမည်။',
-        desc_en: 'You qualify for 100% tuition-free state universities. After graduation, you are entitled to an 18-month job search visa leading directly to the EU Blue Card.',
+        desc_en: 'You qualify for tuition-free state universities. After graduation, you are entitled to an 18-month job search visa leading directly to the EU Blue Card.',
         recommendedVocation: 'MSc Computer Science, Engineering, or Data Analytics',
         recommendedVocation_my: 'ကွန်ပျူတာသိပ္ပံ၊ အင်ဂျင်နီယာ သို့မဟုတ် စီးပွားရေးစီမံခန့်ခွဲမှု',
       };

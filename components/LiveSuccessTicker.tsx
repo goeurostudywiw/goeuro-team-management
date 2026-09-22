@@ -30,7 +30,7 @@ const verifiedMilestones = [
     name: 'Ma Hnin Ei Phyu',
     pathway: 'MSc Computer Science',
     city: 'TU Dresden',
-    achievement: '100% Tuition-Free Admission',
+    achievement: 'Tuition-Free Admission',
     achievement_my: 'TU Dresden တက္ကသိုလ်ဝင်ခွင့်ရရှိပြီး (ကျူရှင်လခ ဝ€)',
     type: 'university',
     time: '1 day ago',

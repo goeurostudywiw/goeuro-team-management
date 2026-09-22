@@ -246,7 +246,7 @@ export default function PublicLandingPage() {
               <p className="text-base sm:text-lg text-zinc-600 leading-relaxed max-w-2xl font-burmese">
                 {isBurmese
                   ? 'ဂျာမနီနိုင်ငံ အစိုးရ တက္ကသိုလ်များတွင် ကျူရှင်လခမဲ့ (0 €) ပညာသင်ယူနိုင်မည့် အခွင့်အလမ်းများနှင့် လစဉ် လစာရရှိမည့် Dual Ausbildung အသက်မွေးဝမ်းကျောင်း ပရိုဂရမ်များအတွက် ဗီဇာ၊ စာရွက်စာတမ်းမှသည် ဂျာမနီ ဟမ်းဘတ်ဌာနချုပ်မှ ကြိုဆိုရေးအထိ တိကျသေချာစွာ လမ်းညွှန်ဝန်ဆောင်မှုပေးပါသည်။'
-                  : 'Empowering ambitious students with 100% tuition-free public universities, fully contracted vocational Ausbildung programs with monthly stipends (€1,000+), and expert visa transition to Hamburg, Munich, and Berlin.'}
+                  : 'Empowering ambitious students with tuition-free public universities, fully contracted vocational Ausbildung programs with monthly stipends (€1,000+), and expert visa transition to Hamburg, Munich, and Berlin.'}
               </p>
 
               {/* Action Buttons with High Conversion Touchpoints */}
@@ -296,9 +296,9 @@ export default function PublicLandingPage() {
 
                 <TiltCard maxTilt={8} glare={true} className="rounded-2xl">
                   <div className="p-3 sm:p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-purple-100/90 shadow-sm hover:shadow-md transition">
-                    <div className="text-xl sm:text-2xl font-black text-emerald-600">100%</div>
+                    <div className="text-xl sm:text-2xl font-black text-emerald-600">Direct</div>
                     <div className="text-[11px] sm:text-xs text-zinc-600 font-medium mt-0.5">
-                      {isBurmese ? 'ပွင့်လင်းမြင်သာ စစ်ဆေးမှု' : 'Direct Germany Contract'}
+                      {isBurmese ? 'တိုက်ရိုက် စာချုပ်ချုပ်ဆိုမှု' : 'Direct Employer Contract'}
                     </div>
                   </div>
                 </TiltCard>
@@ -490,7 +490,7 @@ export default function PublicLandingPage() {
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0" />
-                      <span><strong>Tuition Fee:</strong> 100% Free / Company-sponsored</span>
+                      <span><strong>Tuition Fee:</strong> Fully Funded / Company-sponsored</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0" />
@@ -698,7 +698,7 @@ export default function PublicLandingPage() {
               {
                 q: 'How much is the monthly stipend for an Ausbildung in Germany?',
                 q_my: 'ဂျာမနီ Ausbildung တွင် လစဉ် လစာမည်မျှ ရရှိပါသလဲ။',
-                a: 'Ausbildung apprentices receive a paid monthly stipend ranging between €950 and €1,400 per month depending on the vocation (e.g. Nursing: €1,150–€1,350/mo, IT: €1,000–€1,200/mo, Hospitality: €900–€1,100/mo). The stipend increases each year of the 3-year contract, and tuition is 100% free.',
+                a: 'Ausbildung apprentices receive a paid monthly stipend ranging between €950 and €1,400 per month depending on the vocation (e.g. Nursing: €1,150–€1,350/mo, IT: €1,000–€1,200/mo, Hospitality: €900–€1,100/mo). The stipend increases each year of the 3-year contract, and tuition is completely free.',
                 a_my: 'Ausbildung တက်ရောက်သူများသည် မိမိရွေးချယ်သော ဘာသာရပ်အလိုက် (သူနာပြု၊ IT၊ ဟိုတယ် စသည်) လစဉ် ယူရို ၉၅၀ မှ ၁,၄၀၀ (တစ်လလျှင် သိန်း ၄၀ ကျော်) ထောက်ပံ့ကြေး လစာကို ပထမနှစ်မှ စတင်ကာ ၃ နှစ်တာလုံး တိုးမြှင့်ရရှိမည် ဖြစ်ပါသည်။ ကျူရှင်လခ လုံးဝ ပေးရန်မလိုပါ။'
               },
               {

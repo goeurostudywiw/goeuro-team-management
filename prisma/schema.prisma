@@ -1,0 +1,466 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organization {
+  id          String    @id @default(cuid())
+  name        String    @default("GOEURO Education Agency")
+  slug        String    @unique @default("goeuro")
+  settings    String    @default("{}") // JSON config
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  users       User[]
+  teams       Team[]
+  roles       Role[]
+  pathways    Pathway[]
+  projects    Project[]
+  campaigns   Campaign[]
+  leads       Lead[]
+  cases       StudentCase[]
+  knowledge   KnowledgeItem[]
+  auditLogs   AuditLog[]
+  ingestionLogs IngestionLog[]
+  financials  FinancialTransaction[]
+  payrolls    StaffPayroll[]
+}
+
+model Team {
+  id          String     @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  managerId   String?
+  manager     User?      @relation("TeamManager", fields: [managerId], references: [id])
+  createdAt   DateTime   @default(now())
+
+  members     UserTeam[]
+  tasks       Task[]
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  isSystem    Boolean      @default(false)
+  permissions String       @default("[]") // JSON array of permission strings
+  createdAt   DateTime     @default(now())
+
+  users       User[]
+}
+
+model User {
+  id              String       @id @default(cuid())
+  orgId           String
+  org             Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name            String
+  email           String       @unique
+  avatar          String?
+  title           String?
+  passwordHash    String?
+  status          String       @default("ACTIVE") // ACTIVE, INACTIVE
+  roleId          String
+  role            Role         @relation(fields: [roleId], references: [id])
+  managerId       String?
+  manager         User?        @relation("UserHierarchy", fields: [managerId], references: [id])
+  directReports   User[]       @relation("UserHierarchy")
+  createdAt       DateTime     @default(now())
+
+  teams           UserTeam[]
+  managedTeams    Team[]       @relation("TeamManager")
+  assignedTasks   Task[]       @relation("TaskAssignee")
+  createdTasks    Task[]       @relation("TaskCreator")
+  ownedContent    ContentItem[] @relation("ContentOwner")
+  factualReviews  ContentItem[] @relation("FactualReviewer")
+  brandApprovals  ContentItem[] @relation("BrandApprover")
+  ownedLeads      Lead[]       @relation("LeadOwner")
+  ownedCases      StudentCase[] @relation("CaseOwner")
+  contactHistories LeadContactHistory[] @relation("ContactAuthor")
+  handoversFrom   CaseHandover[] @relation("HandoverFrom")
+  handoversTo     CaseHandover[] @relation("HandoverTo")
+  auditLogs       AuditLog[]
+  payrolls        StaffPayroll[]
+}
+
+model UserTeam {
+  userId    String
+  teamId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId])
+}
+
+model Pathway {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  code        String       @unique
+  description String?
+  isActive    Boolean      @default(true)
+  checklists  String       @default("[]") // Default case checklist JSON template
+  createdAt   DateTime     @default(now())
+
+  campaigns   Campaign[]
+  content     ContentItem[]
+  leads       Lead[]
+  cases       StudentCase[]
+  knowledge   KnowledgeItem[]
+}
+
+model Project {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  pathwayId   String?
+  ownerId     String?
+  status      String       @default("ACTIVE") // ACTIVE, COMPLETED, ARCHIVED
+  targetDate  DateTime?
+  createdAt   DateTime     @default(now())
+
+  tasks       Task[]
+}
+
+model Task {
+  id            String       @id @default(cuid())
+  orgId         String
+  projectId     String?
+  project       Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  title         String
+  description   String?
+  ownerId       String?
+  creator       User?        @relation("TaskCreator", fields: [ownerId], references: [id])
+  assigneeId    String?
+  assignee      User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  teamId        String?
+  team          Team?        @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  pathwayId     String?
+  priority      String       @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  status        String       @default("TODO") // TODO, IN_PROGRESS, REVIEW, DONE
+  dueDate       DateTime?
+  isRecurring   Boolean      @default(false)
+  recurringRule String?      // WEEKLY, DAILY
+  completedAt   DateTime?
+  createdAt     DateTime     @default(now())
+
+  comments      TaskComment[]
+}
+
+model TaskComment {
+  id          String   @id @default(cuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  authorName  String
+  content     String
+  attachments String?  // JSON
+  createdAt   DateTime @default(now())
+}
+
+model Campaign {
+  id          String       @id @default(cuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  name        String
+  pathwayId   String?
+  pathway     Pathway?     @relation(fields: [pathwayId], references: [id])
+  objective   String?
+  budget      Float        @default(0)
+  status      String       @default("ACTIVE") // PLANNING, ACTIVE, COMPLETED
+  createdAt   DateTime     @default(now())
+
+  content     ContentItem[]
+  leads       Lead[]
+}
+
+model ContentItem {
+  id                String       @id @default(cuid())
+  orgId             String
+  campaignId        String?
+  campaign          Campaign?    @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  pathwayId         String?
+  pathway           Pathway?     @relation(fields: [pathwayId], references: [id])
+  targetAudience    String?
+  topic             String
+  pillar            String       // EDUCATION_40, GERMANY_LIFE_20, APPLICATION_20, TRUST_10, CONVERSION_10
+  channel           String       // TIKTOK, FACEBOOK, INSTAGRAM, YOUTUBE, TELEGRAM
+  format            String       // REEL, CAROUSEL, EXPLAINER, STORY, LIVE_QA
+  ownerId           String
+  owner             User         @relation("ContentOwner", fields: [ownerId], references: [id])
+  factualReviewerId String?
+  factualReviewer   User?        @relation("FactualReviewer", fields: [factualReviewerId], references: [id])
+  brandApproverId   String?
+  brandApprover     User?        @relation("BrandApprover", fields: [brandApproverId], references: [id])
+  sourceLinks       String?      @default("[]") // JSON array of references
+  assetUrl          String?
+  callToAction      String?
+  plannedDate       DateTime?
+  stage             String       @default("IDEA") // IDEA, RESEARCH, DRAFT, FACTUAL_REVIEW, BRAND_APPROVAL, SCHEDULED, PUBLISHED, RESULTS_RECORDED
+  publishedUrl      String?
+  publishedAt       DateTime?
+  metrics           String       @default("{\"views\":0,\"clicks\":0,\"inquiries\":0,\"qualified\":0,\"adSpend\":0}")
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model Lead {
+  id                  String       @id @default(cuid())
+  orgId               String
+  org                 Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  fullName            String
+  phone               String?
+  email               String?
+  preferredContact    String       @default("TELEGRAM") // TELEGRAM, VIBER, WHATSAPP, PHONE, EMAIL
+  contactHandle       String
+  interestedPathwayId String?
+  interestedPathway   Pathway?     @relation(fields: [interestedPathwayId], references: [id])
+  educationStatus     String       // HIGH_SCHOOL, BACHELOR, DIPLOMA, WORKING, GED, OTHER
+  sourceCampaignId    String?
+  sourceCampaign      Campaign?    @relation(fields: [sourceCampaignId], references: [id], onDelete: SetNull)
+  sourceContentId     String?
+  channel             String       @default("WEB") // GOOGLE_FORM, FACEBOOK, TIKTOK, WEB, LIVE_WEBHOOK, CSV_IMPORT
+  externalId          String?
+  rawMetadata         String?      @default("{}")
+  utmSource           String?      @default("direct_web")
+  utmMedium           String?
+  notes               String?
+  consentGiven        Boolean      @default(true)
+  consentDate         DateTime     @default(now())
+  stage               String       @default("NEW") // NEW, CONTACTED, ASSESSMENT_NEEDED, QUALIFIED, CONSULTATION_BOOKED, CONSULTATION_COMPLETED, APPLICATION_READY, CLOSED_LOST, CLOSED_WON
+  ownerId             String?
+  owner               User?        @relation("LeadOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  nextAction          String?
+  nextFollowUpDate    DateTime?
+  qualificationNotes  String?
+  consultationSnapshotUrl String?
+  isDuplicateOfId     String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  contacts            LeadContactHistory[]
+  case                StudentCase?
+  recordings          MeetingRecording[]
+  snapshots           MeetingSnapshot[]
+}
+
+model LeadContactHistory {
+  id           String    @id @default(cuid())
+  leadId       String
+  lead         Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  authorId     String?
+  author       User?     @relation("ContactAuthor", fields: [authorId], references: [id])
+  contactType  String    // PHONE, TELEGRAM_VIBER, EMAIL, MEETING
+  summary      String
+  followUpDate DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model StudentCase {
+  id                 String       @id @default(cuid())
+  orgId              String
+  org                Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  leadId             String       @unique
+  lead               Lead         @relation(fields: [leadId], references: [id])
+  studentName        String
+  contactInfo        String
+  pathwayId          String
+  pathway            Pathway      @relation(fields: [pathwayId], references: [id])
+  agreedScope        String?      // Full placement, consultation only, doc translation/APS
+  ownerId            String
+  owner              User         @relation("CaseOwner", fields: [ownerId], references: [id])
+  status             String       @default("ACTIVE") // ACTIVE, HOLD, COMPLETED, WITHDRAWN
+  targetIntake       String?      // Winter 2026, Summer 2027
+  targetGermanLevel  String?      // B1, B2
+  currentGermanLevel String?      // A0, A1, A2, B1
+  uniAssistStatus    String?
+  checklist          String       @default("[]") // JSON verified checklist
+  notes              String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  milestones         CaseMilestone[]
+  documents          CaseDocument[]
+  handovers          CaseHandover[]
+}
+
+model CaseMilestone {
+  id          String      @id @default(cuid())
+  caseId      String
+  studentCase StudentCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  title       String
+  dueDate     DateTime?
+  completedAt DateTime?
+  status      String      @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
+}
+
+model CaseDocument {
+  id           String      @id @default(cuid())
+  caseId       String
+  studentCase  StudentCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  documentName String
+  documentType String      // PASSPORT, TRANSCRIPT, LANGUAGE_CERT, CV, MOTIVATION_LETTER, APS, CONTRACT
+  status       String      @default("REQUESTED") // REQUESTED, SUBMITTED, VERIFIED, REJECTED
+  fileUrl      String?
+  notes        String?
+  updatedAt    DateTime    @updatedAt
+}
+
+model CaseHandover {
+  id            String      @id @default(cuid())
+  caseId        String
+  studentCase   StudentCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  fromUserId    String
+  fromUser      User        @relation("HandoverFrom", fields: [fromUserId], references: [id])
+  toUserId      String
+  toUser        User        @relation("HandoverTo", fields: [toUserId], references: [id])
+  reason        String
+  handoverNotes String?
+  createdAt     DateTime    @default(now())
+}
+
+model KnowledgeItem {
+  id             String       @id @default(cuid())
+  orgId          String
+  org            Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  category       String       // FAQ, CONSULTATION_SCRIPT, SERVICE_DESCRIPTION, SOP, CONTENT_REFERENCE, BRAND_ASSET
+  title          String
+  contentMm      String       // Burmese content
+  contentEn      String       // English content
+  pathwayId      String?
+  pathway        Pathway?     @relation(fields: [pathwayId], references: [id])
+  ownerName      String
+  reviewerName   String?
+  status         String       @default("APPROVED") // DRAFT, APPROVED, DEPRECATED
+  lastReviewDate DateTime     @default(now())
+  links          String?      @default("[]") // JSON
+  createdAt      DateTime     @default(now())
+}
+
+model AuditLog {
+  id         String       @id @default(cuid())
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?        @relation(fields: [userId], references: [id])
+  entityType String       // USER, TASK, CONTENT, LEAD, CASE, ROLE, SETTING
+  entityId   String
+  action     String       // CREATE, UPDATE, STATUS_CHANGE, APPROVAL, REASSIGNMENT, DEACTIVATE
+  details    String       @default("{}") // JSON
+  createdAt  DateTime     @default(now())
+}
+
+model IngestionLog {
+  id           String       @id @default(cuid())
+  orgId        String
+  org          Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  channel      String       // GOOGLE_FORM, FACEBOOK, TIKTOK, LIVE_WEBHOOK, CSV_IMPORT
+  status       String       @default("SUCCESS") // SUCCESS, DUPLICATE, FAILED
+  senderIp     String?
+  leadId       String?
+  leadName     String?
+  payload      String       // Raw incoming JSON
+  errorMessage String?
+  createdAt    DateTime     @default(now())
+}
+
+model MeetingRecording {
+  id          String    @id @default(cuid())
+  leadId      String?
+  lead        Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  roomId      String
+  filename    String
+  fileUrl     String
+  fileSize    Int?      @default(0)
+  duration    Int       @default(0) // Duration in seconds
+  notes       String?
+  counselorId String?
+  createdAt   DateTime  @default(now())
+}
+
+model MeetingSnapshot {
+  id          String    @id @default(cuid())
+  leadId      String?
+  lead        Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  roomId      String
+  fileUrl     String
+  triggerType String    @default("AUTO") // AUTO, MANUAL
+  createdAt   DateTime  @default(now())
+}
+
+model MeetingRoomSession {
+  id              String           @id // roomId
+  leadId          String?
+  counselorActive Boolean          @default(false)
+  studentActive   Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  signals         MeetingSignal[]
+}
+
+model MeetingSignal {
+  id          String              @id @default(cuid())
+  sessionId   String
+  session     MeetingRoomSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sender      String              // counselor or student
+  type        String              // offer, answer, candidate, user-joined, user-left, snapshot-taken
+  payload     String              // JSON string of data
+  timestamp   Float               // millisecond timestamp
+  createdAt   DateTime            @default(now())
+}
+
+model FinancialTransaction {
+  id              String       @id @default(cuid())
+  orgId           String
+  org             Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type            String       // INCOME, EXPENSE
+  category        String       // TUITION_FEE, CONSULTATION_FEE, TRANSLATION_APS, MARKETING_AD_SPEND, SALARY_PAYROLL, OFFICE_RENT, TECH_SUBSCRIPTION, HAMBURG_LIAISON, MISC
+  amount          Float
+  currency        String       @default("EUR") // EUR, MMK, USD
+  exchangeRate    Float        @default(1.0)   // MMK per EUR or USD rate
+  amountInEur     Float        // Normalized EUR amount for consistent P&L calculation
+  date            DateTime     @default(now())
+  title           String
+  description     String?
+  referenceId     String?      // caseId, leadId, campaignId, or payrollId
+  paymentMethod   String       @default("BANK_TRANSFER") // KBZPAY, AYA, CB, BANK_TRANSFER, CASH
+  status          String       @default("CONFIRMED") // CONFIRMED, PENDING, CANCELLED
+  createdById     String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model StaffPayroll {
+  id                String       @id @default(cuid())
+  orgId             String
+  org               Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  userId            String
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month             String       // e.g. "2026-09"
+  baseSalary        Float        @default(0)
+  currency          String       @default("MMK") // MMK or EUR
+  caseCommissions   Float        @default(0)     // Commission for successfully enrolled/placed student cases
+  leadBonuses       Float        @default(0)     // Bonus for screened & qualified student leads
+  performanceBonus  Float        @default(0)     // Special founder discretionary bonus
+  deductions        Float        @default(0)     // Taxes / unpaid leaves / advances
+  netSalary         Float        @default(0)     // Base + Commissions + Bonuses - Deductions
+  casesCount        Int          @default(0)     // Number of cases handled
+  leadsCount        Int          @default(0)     // Number of leads qualified
+  status            String       @default("PENDING") // DRAFT, APPROVED, PAID
+  paidAt            DateTime?
+  paymentMethod     String?      @default("KBZPAY") // KBZPAY, AYA, BANK_TRANSFER, CASH
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+

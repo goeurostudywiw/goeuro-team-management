@@ -43,3 +43,7 @@ prisma/*.db-journal
 
 # temporary scripts
 scripts/test_*.js
+
+# source font directory (web fonts installed in public/fonts)
+MM Font/
+

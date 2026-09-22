@@ -1,3 +1,43 @@
+@font-face {
+  font-family: 'WaTokeLay';
+  src: url('/fonts/SM01_WaTokeLay-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aka03';
+  src: url('/fonts/Aka03-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Phantee03';
+  src: url('/fonts/PT03_1YearAnniversary-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PhanteeHandwritten';
+  src: url('/fonts/PT13_PhanteeHandWritten-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ATest';
+  src: url('/fonts/ATest-Light.ttf') format('truetype');
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,14 +45,32 @@
 @layer base {
   body {
     @apply bg-brand-canvas text-brand-black antialiased min-h-screen font-sans;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Myanmar", "Pyidaungsu", "Padauk", sans-serif;
+    font-family: 'WaTokeLay', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Myanmar", "Pyidaungsu", "Padauk", sans-serif;
   }
 }
 
 .font-burmese {
-  font-family: "Noto Sans Myanmar", "Pyidaungsu", "Padauk", sans-serif !important;
+  font-family: 'WaTokeLay', "Noto Sans Myanmar", "Pyidaungsu", "Padauk", sans-serif !important;
   line-height: 1.7;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.015em;
+}
+
+.font-watokelay {
+  font-family: 'WaTokeLay', "Noto Sans Myanmar", sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+.font-aka {
+  font-family: 'Aka03', "Noto Sans Myanmar", sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+.font-phantee {
+  font-family: 'Phantee03', "Noto Sans Myanmar", sans-serif !important;
+}
+
+.font-handwritten {
+  font-family: 'PhanteeHandwritten', cursive, "Noto Sans Myanmar", sans-serif !important;
 }
 
 /* Notion-style minimal scrollbars */

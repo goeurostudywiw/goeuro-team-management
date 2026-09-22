@@ -49,7 +49,12 @@ module.exports = {
         }
       },
       fontFamily: {
-        burmese: ['"Noto Sans Myanmar"', 'Pyidaungsu', 'Padauk', 'sans-serif'],
+        burmese: ['WaTokeLay', '"Noto Sans Myanmar"', 'Pyidaungsu', 'Padauk', 'sans-serif'],
+        watokelay: ['WaTokeLay', '"Noto Sans Myanmar"', 'Pyidaungsu', 'sans-serif'],
+        aka: ['Aka03', '"Noto Sans Myanmar"', 'Pyidaungsu', 'sans-serif'],
+        phantee: ['Phantee03', '"Noto Sans Myanmar"', 'Pyidaungsu', 'sans-serif'],
+        handwritten: ['PhanteeHandwritten', 'cursive', '"Noto Sans Myanmar"', 'sans-serif'],
+        atest: ['ATest', '"Noto Sans Myanmar"', 'Pyidaungsu', 'sans-serif'],
       },
       boxShadow: {
         'notion': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',

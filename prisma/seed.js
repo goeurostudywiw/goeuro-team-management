@@ -115,19 +115,6 @@ async function main() {
     },
   });
 
-  const viewerRole = await prisma.role.create({
-    data: {
-      orgId: org.id,
-      name: 'Viewer (Restricted)',
-      description: 'Read-only access to general tasks and knowledge. Cannot view private leads or student cases',
-      isSystem: true,
-      permissions: JSON.stringify([
-        'task:read',
-        'knowledge:read'
-      ]),
-    },
-  });
-
   // 3. Create Pathways
   const ausbildungPathway = await prisma.pathway.create({
     data: {
